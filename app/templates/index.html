@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🏠 Hyderabad House Price Predictor</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏠 Hyderabad House Price Prediction</h1>
+            <p class="subtitle">Get instant property valuations powered by AI</p>
+        </div>
+
+        <form action="/predict" method="post">
+            <div class="form-group">
+                <label for="area">
+                    <span class="icon">📏</span> Area (Square Feet)
+                </label>
+                <input type="number" id="area" name="Area" placeholder="e.g., 1500" min="100" step="1" required>
+            </div>
+
+            <div class="form-group">
+                <label for="location">
+                    <span class="icon">📍</span> Location
+                </label>
+                <select id="location" name="Location" required>
+                    <option value="" disabled selected>Select a location</option>
+                    {% for location in locations %}
+                    <option value="{{ location }}">{{ location }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="bedrooms">
+                    <span class="icon">🛏️</span> Number of Bedrooms
+                </label>
+                <input type="number" id="bedrooms" name="No. of Bedrooms" placeholder="e.g., 3" min="1" max="10" required>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="resale">
+                        <span class="icon">🔄</span> Resale Property
+                    </label>
+                    <select id="resale" name="Resale" required>
+                        <option value="" disabled selected>Choose</option>
+                        <option value="0">No</option>
+                        <option value="1">Yes</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="maintenance">
+                        <span class="icon">👷</span> Maintenance Staff
+                    </label>
+                    <select id="maintenance" name="MaintenanceStaff" required>
+                        <option value="" disabled selected>Choose</option>
+                        <option value="0">No</option>
+                        <option value="1">Yes</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="gymnasium">
+                    <span class="icon">💪</span> Gymnasium Facility
+                </label>
+                <select id="gymnasium" name="Gymnasium" required>
+                    <option value="" disabled selected>Choose</option>
+                    <option value="0">No</option>
+                    <option value="1">Yes</option>
+                </select>
+            </div>
+
+            <button type="submit">
+                <span>🔮 Predict Price</span>
+            </button>
+        </form>
+    </div>
+</body>
+</html>
