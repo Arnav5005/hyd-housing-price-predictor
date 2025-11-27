@@ -4,34 +4,41 @@ import joblib
 import os
 from ydata_profiling import ProfileReport
 
-app = Flask(__name__)
+app=Flask(__name__)
 
-# Load the trained model
-model_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'housing_model.joblib')
-model = joblib.load(model_path)
+# load the trained model
+model_path=os.path.join(os.path.dirname(os.path.dirname(__file__)),'housing_model.joblib')
+model=joblib.load(model_path)
 
-# Get all feature names from training data to ensure proper encoding
-data_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'data', 'Hyderabad.csv')
-df = pd.read_csv(data_path)
+# get all feature names from training data to ensure proper encoding
+data_path=os.path.join(os.path.dirname(os.path.dirname(__file__)),'data','Hyderabad.csv')
+df=pd.read_csv(data_path)
 
-# Apply EXACT same preprocessing as training script
-upper = df["Price"].quantile(0.98)
-df = df[df["Price"] <= upper]
+upper=df["Price"].quantile(0.98)
+df=df[df["Price"]<=upper]
 
-# Encode exactly like training
-df_encoded = pd.get_dummies(df, columns=['Location'], drop_first=True)
-feature_columns = [col for col in df_encoded.columns if col != 'Price']
+# encoding
+df_encoded=pd.get_dummies(df,columns=['Location'],drop_first=True)
+feature_columns=[col for col in df_encoded.columns if col!='Price'] # all columns except price
 
 @app.route('/')
 def home():
-    # Get all unique locations from the dataset
-    locations = sorted(df['Location'].unique())
+    locations=sorted(df['Location'].unique())
     return render_template('index.html', locations=locations)
 
 @app.route('/profile')
 def profile():
-    # Generate pandas profiling report
-    profile = ProfileReport(df, title="Hyderabad Housing Data Profile", explorative=True, minimal=True)
+    # important columns
+    cols_to_profile=["Price","Area","Location","No. of Bedrooms","Resale","MaintenanceStaff","Gymnasium"]
+
+    # Filter the dataframe to only these columns
+    df_small=df[cols_to_profile].copy()
+    profile=ProfileReport(
+        df_small, 
+        title="Housing Data Profile",
+        explorative=False, 
+        minimal=True
+    )
     return profile.to_html()
 
 @app.route('/predict', methods=['POST'])
