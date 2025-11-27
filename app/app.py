@@ -52,43 +52,42 @@ def predict():
         maintenance_staff=int(request.form['MaintenanceStaff'])
         gymnasium=int(request.form['Gymnasium'])
         
-        # Get all column names from original CSV (excluding Price)
-        all_cols = [col for col in df.columns if col != 'Price']
+        # get all column names
+        all_cols=[col for col in df.columns if col!='Price']
         
-        # Create input row with all columns, defaulting to 0
-        input_dict = {}
+        # create input row with all columns
+        input_dict={}
         for col in all_cols:
-            if col == 'Area':
-                input_dict[col] = area
-            elif col == 'Location':
-                input_dict[col] = location
-            elif col == 'No. of Bedrooms':
-                input_dict[col] = bedrooms
-            elif col == 'Resale':
-                input_dict[col] = resale
-            elif col == 'MaintenanceStaff':
-                input_dict[col] = maintenance_staff
-            elif col == 'Gymnasium':
-                input_dict[col] = gymnasium
+            if col=='Area':
+                input_dict[col]=area
+            elif col=='Location':
+                input_dict[col]=location
+            elif col=='No. of Bedrooms':
+                input_dict[col]=bedrooms
+            elif col=='Resale':
+                input_dict[col]=resale
+            elif col=='MaintenanceStaff':
+                input_dict[col]=maintenance_staff
+            elif col=='Gymnasium':
+                input_dict[col]=gymnasium
             else:
-                input_dict[col] = 0
+                input_dict[col]=0
         
-        # Create DataFrame
-        input_df = pd.DataFrame([input_dict])
+        # create dataFrame
+        input_df=pd.DataFrame([input_dict])
         
-        # Apply same encoding as training (get_dummies with drop_first=True)
-        input_encoded = pd.get_dummies(input_df, columns=['Location'], drop_first=True)
+        # encoding
+        input_encoded=pd.get_dummies(input_df, columns=['Location'], drop_first=True)
         
         # Ensure all feature columns from training exist
         for col in feature_columns:
             if col not in input_encoded.columns:
-                input_encoded[col] = 0
+                input_encoded[col]=0
         
-        # Select only the features that the model expects, in the exact order
-        input_final = input_encoded[feature_columns]
+        input_final=input_encoded[feature_columns]
         
-        # Make prediction
-        prediction = model.predict(input_final)[0]
+        # prediction
+        prediction=model.predict(input_final)[0]
         
         # Return result as HTML
         return f'''
@@ -123,7 +122,7 @@ def predict():
         
     except Exception as e:
         import traceback
-        error_detail = traceback.format_exc()
+        error_detail=traceback.format_exc()
         return f'''
         <!DOCTYPE html>
         <html lang="en">
@@ -148,4 +147,3 @@ def predict():
 
 if __name__ == '__main__':
     app.run(debug=True)
-
