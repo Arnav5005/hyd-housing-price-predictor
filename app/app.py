@@ -31,7 +31,7 @@ def profile():
     # important columns
     cols_to_profile=["Price","Area","Location","No. of Bedrooms","Resale","MaintenanceStaff","Gymnasium"]
 
-    # Filter the dataframe to only these columns
+    # filter the columns
     df_small=df[cols_to_profile].copy()
     profile=ProfileReport(
         df_small, 
@@ -44,13 +44,13 @@ def profile():
 @app.route('/predict', methods=['POST'])
 def predict():
     try:
-        # Get form data
-        area = float(request.form['Area'])
-        location = request.form['Location']
-        bedrooms = int(request.form['No. of Bedrooms'])
-        resale = int(request.form['Resale'])
-        maintenance_staff = int(request.form['MaintenanceStaff'])
-        gymnasium = int(request.form['Gymnasium'])
+        # get form data
+        area=float(request.form['Area'])
+        location=request.form['Location']
+        bedrooms=int(request.form['No. of Bedrooms'])
+        resale=int(request.form['Resale'])
+        maintenance_staff=int(request.form['MaintenanceStaff'])
+        gymnasium=int(request.form['Gymnasium'])
         
         # Get all column names from original CSV (excluding Price)
         all_cols = [col for col in df.columns if col != 'Price']
