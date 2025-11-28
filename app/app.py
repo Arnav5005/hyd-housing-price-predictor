@@ -5,15 +5,15 @@ from ydata_profiling import ProfileReport
 
 app = Flask(__name__)
 
-# Load model and data
+# load model and data
 model = joblib.load('housing_model.joblib')
 df = pd.read_csv('data/Hyderabad.csv')
 
-# Clean data (remove outliers)
+# remove outliers
 upper = df["Price"].quantile(0.98)
 df = df[df["Price"] <= upper]
 
-# Prepare feature columns
+# prepare feature columns
 df_encoded = pd.get_dummies(df, columns=['Location'], drop_first=True)
 feature_columns = [col for col in df_encoded.columns if col != 'Price']
 
@@ -25,40 +25,36 @@ def home():
 @app.route('/predict', methods=['POST'])
 def predict():
     try:
-        # Get form data
+        # get form data
         location = request.form['location']
         area = float(request.form['area'])
         bedrooms = int(request.form['bedrooms'])
         age = request.form['age']
         
-        # Map age to numeric (simple encoding)
+        # encoding
         age_map = {'0-5': 2.5, '5-10': 7.5, '10-20': 15, '20+': 25}
         age_years = age_map.get(age, 10)
         
-        # Create input dictionary with all required columns
-        input_dict = {}
-        for col in df.columns:
-            if col == 'Area':
-                input_dict[col] = area
-            elif col == 'Location':
-                input_dict[col] = location
-            elif col == 'No. of Bedrooms':
-                input_dict[col] = bedrooms
-            elif col == 'Age':
-                input_dict[col] = age_years
-            else:
-                input_dict[col] = 0  # Default for other features
+        # build only necessary input fields; missing one-hot columns will be added later
+        input_dict = {
+            'Area': area,
+            'Location': location,
+            'No. of Bedrooms': bedrooms
+        }
+        # include Age only if present in training columns
+        if 'Age' in df.columns:
+            input_dict['Age'] = age_years
         
-        # Convert to DataFrame and encode
+        # convert to dataFrame and encode
         input_df = pd.DataFrame([input_dict])
         input_encoded = pd.get_dummies(input_df, columns=['Location'], drop_first=True)
         
-        # Ensure all feature columns exist
+        # ensure all feature columns exist
         for col in feature_columns:
             if col not in input_encoded.columns:
                 input_encoded[col] = 0
         
-        # Select features and predict
+        # select features and predict
         input_final = input_encoded[feature_columns]
         prediction = model.predict(input_final)[0]
         
@@ -87,7 +83,7 @@ def profile():
         df_subset = df[cols].copy()
 
         # Generate the profiling report on the subset
-        report = ProfileReport(df_subset, title="Hyderabad Dataset Profile (Selected Columns)", explorative=True)
+        report = ProfileReport(df_subset, title="Hyderabad Dataset Profile", explorative=True)
         return report.to_html()
     except Exception as e:
         return f"<pre>Failed to generate profile: {e}</pre>", 500
