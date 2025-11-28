@@ -75,8 +75,8 @@ def register():
 @app.route('/profile')
 def profile():
     try:
-        # Use only selected columns for the profile
-        wanted_cols = ['Location', 'Area', 'No. of Bedrooms']
+        # Use selected columns for the profile, now including Price
+        wanted_cols = ['Location', 'Area', 'No. of Bedrooms', 'Price']
         cols = [c for c in wanted_cols if c in df.columns]
         if not cols:
             return "<pre>No requested columns found to profile.</pre>", 400
