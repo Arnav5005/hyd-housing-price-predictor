@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign In · Hyderabad Price Predictor</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+    /* Scoped styles to match registration card */
+    .auth-wrapper { max-width: 440px; margin: 0 auto; }
+    .auth-card {
+      background: #0b1220; color: #e6f2ff;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 14px; padding: 22px 22px 18px;
+      box-shadow: 0 12px 36px rgba(3,10,30,0.6);
+    }
+    .auth-title { font-size: 22px; font-weight: 700; margin-bottom: 6px; }
+    .auth-subtitle { color: #9fb7c9; font-size: 13px; margin-bottom: 16px; }
+    .form-row { margin-bottom: 14px; }
+    .form-row label { display:block; font-size: 13px; color:#cfe7ff; margin-bottom:6px; }
+    .form-input { width:100%; padding: 11px 12px; border-radius:10px; border:1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.04); color:#e7f6ff; outline:none; font-size:14px; }
+    .form-input:focus { border-color:#67e1ff; box-shadow: 0 0 0 2px rgba(103,225,255,0.2); }
+    .btn-primary { width:100%; background: linear-gradient(135deg,#2563eb,#1d4ed8); color:#fff; border:none; padding:12px 14px; border-radius:10px; font-weight:700; cursor:pointer; }
+    .helper { font-size:12px; color:#9fb7c9; margin-top:10px; text-align:center; }
+    .helper a { color:#67e1ff; text-decoration:none; }
+  </style>
+</head>
+<body>
+  <!-- Global header consistent with other pages -->
+  <header class="header">
+    <div class="header-content">
+      <div class="logo">🏠 Hyderabad Price Predictor</div>
+      <nav class="nav">
+        <a href="/login" class="nav-link">Sign In</a>
+        <a href="/register" class="nav-link register-btn">Register</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="auth-wrapper">
+    <div class="auth-card">
+      <div class="auth-title">Welcome back</div>
+      <div class="auth-subtitle">Static demo — this form is not connected to backend</div>
+
+      <form id="loginForm" novalidate>
+        <div class="form-row">
+          <label for="email">Email</label>
+          <input id="email" name="email" type="email" class="form-input" placeholder="you@example.com" autocomplete="email" required>
+        </div>
+        <div class="form-row">
+          <label for="password">Password</label>
+          <input id="password" name="password" type="password" class="form-input" placeholder="••••••••" autocomplete="current-password" required>
+        </div>
+        <button type="submit" class="btn-primary">Sign In</button>
+        <div class="helper">Don't have an account? <a href="/register">Register now</a></div>
+      </form>
+    </div>
+  </main>
+
+  <script>
+    // Demo only – prevent actual submission
+    document.getElementById('loginForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      alert('This is a static demo form. No data was submitted.');
+    });
+  </script>
+</body>
+</html>

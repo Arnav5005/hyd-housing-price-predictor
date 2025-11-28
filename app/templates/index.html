@@ -3,82 +3,101 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🏠 Hyderabad House Price Predictor</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Hyderabad House Price Predictor</title>
+    <link rel="stylesheet" href="static/style.css">
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>🏠 Hyderabad House Price Prediction</h1>
-            <p class="subtitle">Get instant property valuations powered by AI</p>
-        </div>
+<header class="header">
+    <div class="header-content">
+        <div class="logo">🏠 Hyderabad Price Predictor</div>
+        <nav class="nav">
+            <a href="/login" class="nav-link">Sign In</a>
+            <a href="/register" class="nav-link register-btn">Register</a>
+        </nav>
+    </div>
+</header>
 
-        <form action="/predict" method="post">
-            <div class="form-group">
-                <label for="area">
-                    <span class="icon">📏</span> Area (Square Feet)
-                </label>
-                <input type="number" id="area" name="Area" placeholder="e.g., 1500" min="100" step="1" required>
-            </div>
+<div class="container">
+    <div class="left">
+        <h1>Hyderabad House Price Predictor</h1>
+        <p class="subtitle">Enter property details to get an instant price estimate.</p>
 
+        <form id="predictForm">
             <div class="form-group">
-                <label for="location">
-                    <span class="icon">📍</span> Location
-                </label>
-                <select id="location" name="Location" required>
-                    <option value="" disabled selected>Select a location</option>
-                    {% for location in locations %}
-                    <option value="{{ location }}">{{ location }}</option>
+                <label for="location">Location</label>
+                <select id="location" name="location" required>
+                    {% for loc in locations %}
+                        <option value="{{ loc }}">{{ loc }}</option>
                     {% endfor %}
                 </select>
             </div>
 
             <div class="form-group">
-                <label for="bedrooms">
-                    <span class="icon">🛏️</span> Number of Bedrooms
-                </label>
-                <input type="number" id="bedrooms" name="No. of Bedrooms" placeholder="e.g., 3" min="1" max="10" required>
-            </div>
-
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="resale">
-                        <span class="icon">🔄</span> Resale Property
-                    </label>
-                    <select id="resale" name="Resale" required>
-                        <option value="" disabled selected>Choose</option>
-                        <option value="0">No</option>
-                        <option value="1">Yes</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="maintenance">
-                        <span class="icon">👷</span> Maintenance Staff
-                    </label>
-                    <select id="maintenance" name="MaintenanceStaff" required>
-                        <option value="" disabled selected>Choose</option>
-                        <option value="0">No</option>
-                        <option value="1">Yes</option>
-                    </select>
-                </div>
+                <label for="area">Area (sq ft)</label>
+                <input type="number" id="area" name="area" min="100" required>
             </div>
 
             <div class="form-group">
-                <label for="gymnasium">
-                    <span class="icon">💪</span> Gymnasium Facility
-                </label>
-                <select id="gymnasium" name="Gymnasium" required>
-                    <option value="" disabled selected>Choose</option>
-                    <option value="0">No</option>
-                    <option value="1">Yes</option>
+                <label for="bedrooms">Number of Bedrooms</label>
+                <input type="number" id="bedrooms" name="bedrooms" min="1" max="10" required>
+            </div>
+
+            <div class="form-group">
+                <label for="age">Property Age</label>
+                <select id="age" name="age" required>
+                    <option value="0-5">0–5 years (New)</option>
+                    <option value="5-10">5–10 years</option>
+                    <option value="10-20">10–20 years</option>
+                    <option value="20+">20+ years</option>
                 </select>
             </div>
 
-            <button type="submit">
-                <span>🔮 Predict Price</span>
-            </button>
+            <button type="submit">Get Price Estimate</button>
         </form>
     </div>
+
+    <!-- Right: Result -->
+    <div class="right">
+        <div class="result" id="result">
+            <div class="no-result">Fill the form and click "Get Price Estimate" to see the prediction.</div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('predictForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const formData = new FormData(this);
+    const resultDiv = document.getElementById('result');
+    resultDiv.innerHTML = '<div class="loading">Calculating price...</div>';
+
+    fetch('/predict', {
+        method: 'POST',
+        body: formData
+    })
+    .then(r => r.json())
+    .then(data => {
+        if (data.price) {
+    const formatted = data.price.toLocaleString('en-IN');
+    resultDiv.innerHTML = `
+        <div class="result-title">Predicted market value</div>
+        <div class="price">₹${formatted}</div>
+        <div class="hint">This is an approximate value based on the trained model.</div>
+        <div style="margin-top:12px">
+            <a href="/profile" target="_blank" style="display:inline-block;background:#2563eb;color:#fff;text-decoration:none;padding:8px 12px;border-radius:8px;">Generate Full Report</a>
+        </div>
+    `;
+}
+
+        else {
+            resultDiv.innerHTML = '<div style="color:#dc2626;">Error: ' + (data.error || 'Unknown error') + '</div>';
+        }
+    })
+    .catch(() => {
+        resultDiv.innerHTML = '<div style="color:#dc2626;">Error: Could not connect to server</div>';
+    });
+});
+</script>
 </body>
 </html>

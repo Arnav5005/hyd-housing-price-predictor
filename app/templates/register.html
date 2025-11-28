@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Register · Hyderabad Price Predictor</title>
+	<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+	<style>
+		/* Scoped, page-specific styles */
+		.auth-wrapper { 
+			max-width: 760px !important; 
+			width: min(92vw, 760px);
+			margin: 96px auto 40px; /* clear fixed header + spacing */
+			padding: 0 12px;
+		}
+		.auth-card {
+			background: #0b1220; color: #e6f2ff;
+			border: 1px solid rgba(255,255,255,0.08);
+			border-radius: 14px; padding: 22px 22px 18px;
+			box-shadow: 0 12px 36px rgba(3,10,30,0.6);
+		}
+		.auth-title { font-size: 22px; font-weight: 700; margin-bottom: 6px; }
+		.auth-subtitle { color: #9fb7c9; font-size: 13px; margin-bottom: 16px; }
+		.form-row { margin-bottom: 14px; }
+		.form-row label { display:block; font-size: 13px; color:#cfe7ff; margin-bottom:6px; }
+		.form-input { width:100%; padding: 11px 12px; border-radius:10px; border:1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.04); color:#e7f6ff; outline:none; font-size:14px; }
+		.form-input:focus { border-color:#67e1ff; box-shadow: 0 0 0 2px rgba(103,225,255,0.2); }
+		.btn-primary { width:100%; background: linear-gradient(135deg,#2563eb,#1d4ed8); color:#fff; border:none; padding:12px 14px; border-radius:10px; font-weight:700; cursor:pointer; }
+		.helper { font-size:12px; color:#9fb7c9; margin-top:6px; }
+	</style>
+</head>
+<body>
+	<!-- Global header (same as home) -->
+	<header class="header">
+		<div class="header-content">
+			<div class="logo">🏠 Hyderabad Price Predictor</div>
+			<nav class="nav">
+				<a href="/login" class="nav-link">Sign In</a>
+				<a href="/register" class="nav-link register-btn">Register</a>
+			</nav>
+		</div>
+	</header>
+
+	<main class="auth-wrapper">
+		<div class="auth-card">
+			<div class="auth-title">Create your account</div>
+
+			<form id="registerForm" novalidate>
+				<div class="form-row">
+					<label for="name">Full name</label>
+					<input id="name" name="name" type="text" class="form-input" placeholder="Arnav Pratap Singh" autocomplete="name" required>
+				</div>
+
+				<div class="form-row">
+					<label for="email">Email</label>
+					<input id="email" name="email" type="email" class="form-input" placeholder="arnav@example.com" autocomplete="email" required>
+				</div>
+
+				<div class="form-row">
+					<label for="password">Password</label>
+					<input id="password" name="password" type="password" class="form-input" placeholder="••••••••" minlength="6" autocomplete="new-password" required>
+					<div class="helper">Minimum 6 characters</div>
+				</div>
+
+				<div class="form-row">
+					<label for="confirm">Confirm password</label>
+					<input id="confirm" name="confirm" type="password" class="form-input" placeholder="Re-enter password" minlength="6" autocomplete="new-password" required>
+					<div id="matchMsg" class="helper"></div>
+				</div>
+
+				<button type="submit" class="btn-primary">Create account</button>
+			</form>
+		</div>
+	</main>
+
+	<script>
+		// Simple client-side validation to show confirm password match
+		const form = document.getElementById('registerForm');
+		const pwd = document.getElementById('password');
+		const confirm = document.getElementById('confirm');
+		const msg = document.getElementById('matchMsg');
+
+		function validateMatch() {
+			if (!confirm.value) { msg.textContent = ''; return; }
+			if (pwd.value === confirm.value) {
+				msg.textContent = 'Passwords match';
+				msg.style.color = '#22c55e';
+			} else {
+				msg.textContent = 'Passwords do not match';
+				msg.style.color = '#f43f5e';
+			}
+		}
+		pwd.addEventListener('input', validateMatch);
+		confirm.addEventListener('input', validateMatch);
+
+		form.addEventListener('submit', (e) => {
+			e.preventDefault();
+			validateMatch();
+			// Demo only – no backend submission
+			alert('This is a static demo form. No data was submitted.');
+		});
+	</script>
+</body>
+</html>
