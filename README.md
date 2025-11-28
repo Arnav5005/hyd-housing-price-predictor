@@ -61,24 +61,34 @@ A machine learning web application that predicts house prices in Hyderabad based
 ## 📁 Project Structure
 
 ```
-housing_model/
+HOUSING_MODEL/
+│
+├── .venv/ # Virtual environment
 │
 ├── app/
-│   ├── app.py              # Flask application
-│   ├── templates/
-│   │   └── index.html      # Main form page
-│   └── static/
-│       └── style.css       # Dark theme styling
+│ ├── static/
+│ │ └── style.css # Frontend styling
+│ │
+│ ├── templates/
+│ │ ├── index.html # Price prediction UI
+│ │ ├── login.html # Login page (optional)
+│ │ └── register.html # Register page (optional)
+│ │
+│ └── app.py # Flask backend
 │
 ├── data/
-│   └── Hyderabad.csv       # Training dataset
+│ └── Hyderabad.csv # Housing dataset
 │
 ├── scripts/
-│   └── train.py            # Model training script
+│ └── train.py # Model training script
 │
-├── housing_model.joblib    # Trained ML model
-├── requirements.txt        # Python dependencies
-└── README.md              # This file
+├── housing_model.joblib # Saved ML model
+│
+├── requirements.txt # Dependencies
+│
+├── README.md # Project documentation
+│
+└── .gitignore # Git ignored files
 ```
 
 ## 🎯 How to Use
@@ -88,10 +98,8 @@ housing_model/
    - **Location** (select from dropdown)
    - **Number of Bedrooms**
    - **Resale** (Yes/No)
-   - **Maintenance Staff** (Yes/No)
-   - **Gymnasium** (Yes/No)
 
-2. Click **"Predict Price"**
+2. Click **"Get Price Estimate"**
 
 3. View the predicted price in rupees (₹)
 
@@ -131,10 +139,6 @@ The model was trained using:
 - [ ] Compare multiple properties
 - [ ] User authentication and saved searches
 - [ ] API endpoints for mobile apps
-
-## 👨‍💻 Developer
-
-Created with ❤️ for Hyderabad real estate analysis
 
 ## 📝 License
 
